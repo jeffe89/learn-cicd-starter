@@ -19,12 +19,15 @@ jobs:
       - name: Build app
         run: scripts/buildprod.sh
 
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+
       - name: Setup gcloud
         uses: google-github-actions/setup-gcloud@v1
         with:
-          service_account_key: ${{ secrets.GCP_CREDENTIALS }}
           project_id: ambient-future-467823-h0
-          export_default_credentials: true
-        
+
       - name: Build and Push Docker Image
         run: gcloud builds submit --tag us-central1-docker.pkg.dev/ambient-future-467823-h0/notely-ar-repo/notely-app:latest .
